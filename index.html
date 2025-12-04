@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blush Beauty Salon</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap');
+
+    :root {
+      --bg-gradient: linear-gradient(135deg,#fff1f2 0%,#ffe4e6 50%,#fce7f3 100%);
+      --text: #3a2e2e;
+      --card-bg: #ffffff;
+      --accent: #e11d48;
+      --accent-dark: #be123c;
+      --accent-light: #fda4af;
+      --chip-bg:#fee2e2;
+      --glass: rgba(255,255,255,0.7);
+    }
+    body.dark {
+      --bg-gradient: linear-gradient(135deg,#020617 0%,#0f172a 50%,#1e1b4b 100%);
+      --text: #f9fafb;
+      --card-bg: #1e293b;
+      --accent: #fb7185;
+      --accent-dark: #e11d48;
+      --accent-light: #831843;
+      --chip-bg:#1f2937;
+      --glass: rgba(15,23,42,0.8);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text);
+      transition: background 0.5s ease, color 0.4s ease;
+      min-height:100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(251,113,133,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.4rem;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      position:sticky;
+      top:0;
+      z-index:100;
+      animation: slideDown .6s ease-out;
+    }
+    body.dark header{
+      background: var(--glass);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    
+    nav a:hover::after {
+      width: 100%;
+    }
+    
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:.8rem;
+    }
+
+    .brand-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background: linear-gradient(135deg,#fb7185 0%,#e11d48 50%,#be123c 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.3rem;
+      color:#fff;
+      animation: floatGlow 3s ease-in-out infinite;
+      box-shadow: 0 8px 24px rgba(225,29,72,0.3);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      margin: 0;
+      color: var(--accent);
+      font-size:1.8rem;
+      font-weight: 600;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size:.9rem;
+      transition: all 0.3s ease;
+      box-shadow:0 8px 24px rgba(225,29,72,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    button:hover {
+      transform:translateY(-2px) scale(1.02);
+      box-shadow:0 12px 32px rgba(225,29,72,0.35);
+    }
+
+    .theme-toggle {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--chip-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      box-shadow: none;
+      padding: 0;
+    }
+    
+    .theme-toggle:hover {
+      transform: rotate(15deg) scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    main{
+      max-width:1200px;
+      margin:0 auto;
+      padding:2rem 1.5rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr 1fr;
+      gap:3rem;
+      align-items:center;
+      margin-bottom:4rem;
+      padding: 1rem 0;
+    }
+
+    .hero-text{
+      opacity:0;
+      transform:translateY(30px);
+      animation: fadeUp .8s ease-out forwards;
+    }
+
+    .hero-text h2{
+      font-family:'Playfair Display',serif;
+      font-size:3rem;
+      line-height:1.15;
+      margin-bottom:1rem;
+      font-weight: 700;
+    }
+    .hero-text span.highlight{
+      color:var(--accent);
+      position: relative;
+    }
+    
+    .hero-text span.highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--accent-light), transparent);
+      opacity: 0.3;
+      border-radius: 4px;
+    }
+    
+    .hero-text p{
+      font-size:1.05rem;
+      opacity:.85;
+      margin-bottom:1.5rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .hero-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.6rem;
+      margin-bottom:1.8rem;
+    }
+    .chip{
+      padding:.4rem .9rem;
+      border-radius:999px;
+      font-size:.8rem;
+      background:var(--chip-bg);
+      border:1px solid rgba(225,29,72,0.1);
+      animation: fadeUp .7s ease-out forwards;
+      opacity:0;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .chip:nth-child(1){animation-delay:.3s;}
+    .chip:nth-child(2){animation-delay:.45s;}
+    .chip:nth-child(3){animation-delay:.6s;}
+
+    .hero-cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      align-items:center;
+    }
+    .secondary-btn{
+      background:transparent;
+      color:var(--accent);
+      border:2px solid var(--accent);
+      box-shadow:none;
+    }
+    
+    .secondary-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .hero-image{
+      position:relative;
+      opacity:0;
+      transform:translateY(30px);
+      animation: fadeUp .8s ease-out forwards;
+      animation-delay:.35s;
+    }
+    .hero-card{
+      background:var(--card-bg);
+      border-radius:28px;
+      padding:1.2rem;
+      box-shadow:0 24px 60px rgba(190,24,93,0.2);
+      overflow:hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    
+    .hero-card:hover {
+      transform: translateY(-8px);
+      box-shadow:0 32px 80px rgba(190,24,93,0.25);
+    }
+    
+    .hero-card img{
+      width:100%;
+      border-radius:22px;
+      object-fit:cover;
+      height:280px;
+      display:block;
+      margin-bottom:1rem;
+      transform:scale(1.02);
+      transition:transform .5s ease;
+    }
+    .hero-card:hover img{
+      transform:scale(1.08);
+    }
+    .hero-card h3{
+      margin:0 0 .3rem;
+      font-size:1.1rem;
+      color:var(--accent);
+      font-family: 'Playfair Display', serif;
+    }
+    .hero-card p{
+      margin:0;
+      font-size:.9rem;
+      opacity:.85;
+      line-height: 1.5;
+    }
+    .hero-pill{
+      position:absolute;
+      right:-12px;
+      top:-12px;
+      padding:.5rem 1.1rem;
+      border-radius:999px;
+      background: linear-gradient(135deg, #18181b, #27272a);
+      color:#f9fafb;
+      font-size:.78rem;
+      font-weight: 600;
+      animation: floatGlow 3.5s ease-in-out infinite;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    body.dark .hero-pill{
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      color:#111827;
+    }
+
+    .section {
+      margin-bottom:4rem;
+      opacity:0;
+      transform:translateY(30px);
+      animation: fadeUp .8s ease-out forwards;
+    }
+    .section:nth-of-type(2){animation-delay:.25s;}
+    .section:nth-of-type(3){animation-delay:.4s;}
+    .section:nth-of-type(4){animation-delay:.55s;}
+    .section:nth-of-type(5){animation-delay:.7s;}
+    .section:nth-of-type(6){animation-delay:.85s;}
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-title{
+      font-family:'Playfair Display',serif;
+      color:var(--accent);
+      font-size:2rem;
+      margin-bottom:.5rem;
+      font-weight: 600;
+    }
+    .section-sub{
+      font-size:.95rem;
+      opacity:.75;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      border-radius: 22px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+      overflow:hidden;
+      transition: all 0.35s ease;
+      opacity:0;
+      transform:translateY(20px);
+      animation: fadeUp .7s ease-out forwards;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .service-card:nth-child(1){animation-delay:.2s;}
+    .service-card:nth-child(2){animation-delay:.35s;}
+    .service-card:nth-child(3){animation-delay:.5s;}
+    .service-card:nth-child(4){animation-delay:.65s;}
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow:0 28px 60px rgba(0,0,0,0.18);
+    }
+    .service-image-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .service-image-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to top, var(--card-bg), transparent);
+    }
+    
+    .service-image{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      display:block;
+      transform:scale(1.05);
+      transition:transform .4s ease;
+    }
+    .service-card:hover .service-image{
+      transform:scale(1.12);
+    }
+    .service-body{
+      padding:1.2rem 1.4rem 1.5rem;
+    }
+    .service-card h3 {
+      margin-top: 0;
+      color: var(--accent);
+      font-family: 'Playfair Display', serif;
+      font-size:1.2rem;
+      margin-bottom: .4rem;
+    }
+    .service-meta{
+      font-size:.8rem;
+      opacity:.7;
+      margin-bottom:.6rem;
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    
+    .service-meta span {
+      background: var(--chip-bg);
+      padding: .2rem .5rem;
+      border-radius: 6px;
+      font-size: .72rem;
+    }
+    
+    .service-body > p {
+      font-size: .88rem;
+      line-height: 1.6;
+      opacity: .85;
+    }
+
+    .before-after-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .before-after-card {
+      background: var(--card-bg);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+      transition: all 0.35s ease;
+    }
+
+    .before-after-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+    }
+
+    .before-after-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+    }
+
+    .before-after-images img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .before-after-images::after {
+      content: '→';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(225,29,72,0.4);
+    }
+
+    .before-after-label {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .before-after-label span:first-child {
+      background: #374151;
+      color: white;
+      padding: .4rem;
+    }
+
+    .before-after-label span:last-child {
+      background: var(--accent);
+      color: white;
+      padding: .4rem;
+    }
+
+    .before-after-info {
+      padding: 1.2rem;
+      text-align: center;
+    }
+
+    .before-after-info h4 {
+      color: var(--accent);
+      font-family: 'Playfair Display', serif;
+      margin-bottom: .3rem;
+    }
+
+    .before-after-info p {
+      font-size: .85rem;
+      opacity: .8;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .testimonial-card {
+      background: var(--card-bg);
+      border-radius: 22px;
+      padding: 2rem;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+      position: relative;
+      transition: all 0.35s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.16);
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 4rem;
+      font-family: 'Playfair Display', serif;
+      color: var(--accent);
+      opacity: 0.15;
+      line-height: 1;
+    }
+
+    .testimonial-stars {
+      color: #fbbf24;
+      font-size: 1rem;
+      margin-bottom: .8rem;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+      font-size: .95rem;
+      line-height: 1.7;
+      opacity: .9;
+      margin-bottom: 1.2rem;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent-light);
+    }
+
+    .testimonial-info h5 {
+      margin: 0;
+      font-size: .95rem;
+      color: var(--accent);
+    }
+
+    .testimonial-info p {
+      margin: 0;
+      font-size: .8rem;
+      opacity: .7;
+    }
+
+    .booking-wrap{
+      display:flex;
+      justify-content:center;
+    }
+    .booking-form {
+      background: var(--card-bg);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+      max-width: 500px;
+      width:100%;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .booking-form h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--accent);
+      margin-top:0;
+      margin-bottom:.5rem;
+      font-size: 1.6rem;
+    }
+    .booking-note{
+      font-size:.85rem;
+      opacity:.75;
+      margin-bottom:1.5rem;
+      line-height: 1.5;
+    }
+    
+    .form-group {
+      position: relative;
+      margin: 1rem 0;
+    }
+    
+    .booking-form input, 
+    .booking-form select {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      border: 2px solid #e5e7eb;
+      font-size: 0.95rem;
+      background:#fdf2f8;
+      transition: all .3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+    .booking-form input:focus,
+    .booking-form select:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(248,113,113,0.15);
+      background: #fff;
+    }
+    body.dark .booking-form input,
+    body.dark .booking-form select{
+      background:#0f172a;
+      border-color:#374151;
+      color:#f9fafb;
+    }
+    
+    body.dark .booking-form input:focus,
+    body.dark .booking-form select:focus {
+      background:#1e293b;
+    }
+    
+    .booking-form button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .gallery-item {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      opacity:0;
+      transform:translateY(20px);
+      animation: fadeUp .75s ease-out forwards;
+    }
+    
+    .gallery-item:nth-child(1){animation-delay:.2s;}
+    .gallery-item:nth-child(2){animation-delay:.3s;}
+    .gallery-item:nth-child(3){animation-delay:.4s;}
+    .gallery-item:nth-child(4){animation-delay:.5s;}
+    
+    .gallery img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display:block;
+      transition: transform 0.5s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 1rem 1rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      color: white;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .gallery-overlay h4 {
+      margin: 0;
+      font-size: .9rem;
+      font-weight: 500;
+    }
+
+    footer {
+      background: var(--card-bg);
+      padding: 3rem 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-brand h3 {
+      color: var(--accent);
+      font-family: 'Playfair Display', serif;
+      margin-bottom: .5rem;
+    }
+    
+    .footer-brand p {
+      font-size: .85rem;
+      opacity: .7;
+      line-height: 1.6;
+    }
+    
+    .footer-links h4 {
+      margin-bottom: 1rem;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+    
+    .footer-links a {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      font-size: .85rem;
+      opacity: .7;
+      margin-bottom: .5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      opacity: 1;
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: .8rem;
+      margin-top: 1rem;
+    }
+    
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--chip-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    @keyframes fadeUp{
+      0%{opacity:0;transform:translateY(30px);}
+      100%{opacity:1;transform:translateY(0);}
+    }
+
+    @keyframes slideDown{
+      0%{opacity:0;transform:translateY(-30px);}
+      100%{opacity:1;transform:translateY(0);}
+    }
+
+    @keyframes floatGlow{
+      0%,100%{transform:translateY(0);box-shadow:0 8px 24px rgba(248,113,113,0.3);}
+      50%{transform:translateY(-6px);box-shadow:0 16px 40px rgba(248,113,113,0.45);}
+    }
+
+    @media(max-width:900px){
+      .hero{
+        grid-template-columns:1fr;
+        gap: 2rem;
+      }
+      .hero-image{
+        order:-1;
+      }
+      .hero-text h2 {
+        font-size: 2.2rem;
+      }
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      nav {
+        display: none;
+      }
+    }
+    
+    @media(max-width:600px){
+      header{
+        padding:.9rem 1.2rem;
+      }
+      .hero-text h2 {
+        font-size: 1.8rem;
+      }
+      .gallery {
+        grid-template-columns: 1fr 1fr;
+      }
+      .gallery img {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-icon">💖</div>
+      <h1>Blush Beauty</h1>
+    </div>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#results">Results</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#booking-section">Book Now</a>
+    </nav>
+    <div class="header-right">
+      <button class="theme-toggle" id="toggle-theme">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <h2>Glow up with <span class="highlight">Blush</span> – where beauty meets self-care.</h2>
+        <p>Pampering facials, stunning bridal looks, luxurious hair rituals and intricate mehendi artistry – all crafted with love under one elegant roof.</p>
+        <div class="hero-tags">
+          <div class="chip">✨ Bridal Specialists</div>
+          <div class="chip">🌿 Skin-safe Products</div>
+          <div class="chip">📍 Heart of the City</div>
+        </div>
+        <div class="hero-cta">
+          <button onclick="scrollToBooking()">Book Your Glow Session</button>
+          <button class="secondary-btn">Explore Services</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-card">
+          <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80" alt="Salon makeover">
+          <h3>Signature Blush Makeover</h3>
+          <p>Soft glam looks tailored for shoots, sangeet nights and special occasions.</p>
+        </div>
+        <div class="hero-pill">⭐ Rated 4.9 by 2000+ Brides</div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section-header">
+        <h2 class="section-title">Our Services</h2>
+        <p class="section-sub">Curated treatments crafted to bring out your natural glow and inner radiance.</p>
+      </div>
+      <div class="services">
+        <div class="service-card">
+          <div class="service-image-wrap">
+            <img class="service-image" src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80" alt="Ayurvedic Facial">
+          </div>
+          <div class="service-body">
+            <h3>Ayurvedic Facial</h3>
+            <div class="service-meta">
+              <span>60 mins</span>
+              <span>Herbal</span>
+              <span>Relaxing</span>
+            </div>
+            <p>Rejuvenating facial using traditional Indian herbs, steam and massage techniques for instant radiance.</p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-image-wrap">
+            <img class="service-image" src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=900&q=80" alt="Bridal Makeup">
+          </div>
+          <div class="service-body">
+            <h3>Bridal Makeup</h3>
+            <div class="service-meta">
+              <span>Custom Trial</span>
+              <span>HD/Airbrush</span>
+            </div>
+            <p>Elegant bridal looks blending modern trends with classic Indian artistry for your big day.</p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-image-wrap">
+            <img class="service-image" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80" alt="Hair Spa">
+          </div>
+          <div class="service-body">
+            <h3>Hair Spa & Styling</h3>
+            <div class="service-meta">
+              <span>Oil Therapy</span>
+              <span>Deep Mask</span>
+            </div>
+            <p>Deep conditioning with nourishing oils and scalp massage for silky, frizz-free, healthy hair.</p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-image-wrap">
+            <img class="service-image" src="https://images.unsplash.com/photo-1595147389795-37094173bfd8?auto=format&fit=crop&w=900&q=80" alt="Mehendi Art">
+          </div>
+          <div class="service-body">
+            <h3>Mehendi Art</h3>
+            <div class="service-meta">
+              <span>Bridal</span>
+              <span>Festive</span>
+              <span>Arabic</span>
+            </div>
+            <p>Intricate henna designs with rich natural stain for weddings, festivals and special celebrations.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="results">
+      <div class="section-header">
+        <h2 class="section-title">Before & After Results</h2>
+        <p class="section-sub">Real transformations created by the Blush Beauty team.</p>
+      </div>
+      <div class="before-after-grid">
+        <div class="before-after-card">
+          <div class="before-after-label">
+            <span>Before</span>
+            <span>After</span>
+          </div>
+          <div class="before-after-images">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=450&q=80" alt="Before facial">
+            <img src="https://images.unsplash.com/photo-1512361436605-a484bdb34b5f?auto=format&fit=crop&w=450&q=80" alt="After facial">
+          </div>
+          <div class="before-after-info">
+            <h4>Bridal Glow Facial</h4>
+            <p>Complete skin transformation for the wedding day</p>
+          </div>
+        </div>
+        <div class="before-after-card">
+          <div class="before-after-label">
+            <span>Before</span>
+            <span>After</span>
+          </div>
+          <div class="before-after-images">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=450&q=80" alt="Before makeup">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=450&q=80" alt="After makeup">
+          </div>
+          <div class="before-after-info">
+            <h4>HD Bridal Makeup</h4>
+            <p>Stunning reception look with airbrush finish</p>
+          </div>
+        </div>
+        <div class="before-after-card">
+          <div class="before-after-label">
+            <span>Before</span>
+            <span>After</span>
+          </div>
+          <div class="before-after-images">
+            <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=450&q=80" alt="Before hair">
+            <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=450&q=80" alt="After hair">
+          </div>
+          <div class="before-after-info">
+            <h4>Hair Transformation</h4>
+            <p>Deep treatment and professional styling</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="testimonials">
+      <div class="section-header">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <p class="section-sub">Hear from our happy brides and beauty enthusiasts.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">Blush made my wedding day absolutely magical! The bridal makeup was flawless and lasted through all the ceremonies. The team understood exactly what I wanted.</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Priya" class="testimonial-avatar">
+            <div class="testimonial-info">
+              <h5>Priya Sharma</h5>
+              <p>Bride, December 2024</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">The Ayurvedic facial here is incredible! My skin has never looked better. The ambiance is so relaxing and the staff is super professional and caring.</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?auto=format&fit=crop&w=100&q=80" alt="Ananya" class="testimonial-avatar">
+            <div class="testimonial-info">
+              <h5>Ananya Verma</h5>
+              <p>Regular Client</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">Best mehendi artist in the city! The designs were so intricate and the color came out beautifully dark. Everyone at my sangeet complimented my hands.</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Meera" class="testimonial-avatar">
+            <div class="testimonial-info">
+              <h5>Meera Kapoor</h5>
+              <p>Bride, November 2024</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="booking-section">
+      <div class="section-header">
+        <h2 class="section-title">Book an Appointment</h2>
+        <p class="section-sub">Choose your service, pick a date and we'll confirm your slot instantly.</p>
+      </div>
+      <div class="booking-wrap">
+        <form class="booking-form" id="booking-form">
+          <h2>Reserve Your Glow Session</h2>
+          <p class="booking-note">Fill in your details and our team will call or WhatsApp you to finalize the timing.</p>
+          <div class="form-group">
+            <input type="text" id="name" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+          </div>
+          <div class="form-group">
+            <select id="service" required>
+              <option value="">Select Service</option>
+              <option>Ayurvedic Facial</option>
+              <option>Bridal Makeup</option>
+              <option>Hair Spa & Styling</option>
+              <option>Mehendi Art</option>
+              <option>Complete Bridal Package</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="date" id="date" required>
+          </div>
+          <button type="submit">Confirm Booking ✨</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="section-header">
+        <h2 class="section-title">Our Gallery</h2>
+        <p class="section-sub">A glimpse into the Blush Beauty experience.</p>
+      </div>
+      <div class="gallery">
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Bridal Look">
+          <div class="gallery-overlay">
+            <h4>Bridal Glam</h4>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80" alt="Facial Treatment">
+          <div class="gallery-overlay">
+            <h4>Facial Glow</h4>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://media.istockphoto.com/id/692999494/photo/hairdresser-cutting-some-hair-tips.jpg?s=612x612&w=0&k=20&c=5bC0fdICk914P5JWYDOi6N3CirJV4IBMTxYJh32vi8o=" alt="Hair Styling">
+          <div class="gallery-overlay">
+            <h4>Hair Styling</h4>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=900&q=80" alt="Mehendi Design">
+          <div class="gallery-overlay">
+            <h4>Mehendi Art</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>💖 Blush Beauty</h3>
+        <p>Where beauty meets self-care. Your trusted destination for bridal makeup, facials, hair care and mehendi art.</p>
+        <div class="social-links">
+          <a href="#">📸</a>
+          <a href="#">📘</a>
+          <a href="#">🐦</a>
+          <a href="#">📍</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="#services">Our Services</a>
+        <a href="#results">Results</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#booking-section">Book Appointment</a>
+      </div>
+      <div class="footer-links">
+        <h4>Services</h4>
+        <a href="#">Bridal Makeup</a>
+        <a href="#">Ayurvedic Facial</a>
+        <a href="#">Hair Spa</a>
+        <a href="#">Mehendi Art</a>
+      </div>
+      <div class="footer-links">
+        <h4>Contact Us</h4>
+        <a href="#">📞 +91 98765 43210</a>
+        <a href="#">📧 hello@blushbeauty.com</a>
+        <a href="#">📍 Connaught Place, New Delhi</a>
+        <a href="#">⏰ 10 AM - 8 PM</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggleThemeBtn = document.getElementById("toggle-theme");
+    const bookingForm = document.getElementById("booking-form");
+
+    toggleThemeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      toggleThemeBtn.textContent = document.body.classList.contains("dark")
+        ? "☀️"
+        : "🌙";
+    });
+
+    bookingForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const service = document.getElementById("service").value;
+      const date = document.getElementById("date").value;
+      alert(`Thank you ${name}! 🎉\n\nYour booking for ${service} on ${date} at Blush Beauty is confirmed!\n\nWe'll contact you shortly to finalize the timing.`);
+      bookingForm.reset();
+    });
+
+    function scrollToBooking(){
+      document.getElementById("booking-section")
+        .scrollIntoView({behavior:"smooth"});
+    }
+
+    document.querySelectorAll('nav a, .footer-links a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if(href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if(target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
